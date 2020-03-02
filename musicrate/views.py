@@ -1,6 +1,6 @@
 import requests, json
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Album, Review
+from .models import *
 from .forms import ReviewForm, SearchForm, UserForm
 from .spotify_api_util import getTokenData
 from django.http import Http404
@@ -28,8 +28,6 @@ def review_edit(request, pk):
 		form = ReviewForm(request.POST)
 		print("Valid request: " + form.is_valid().__str__())
 		if form.is_valid():
-		    # review = form.save(commit=False)
-		    # review.author = request.user
 		    review.rating = form.cleaned_data['rating']
 		    review.comment = form.cleaned_data['comment']
 		    review.updated = timezone.now()
@@ -41,26 +39,13 @@ def review_edit(request, pk):
 	    album = review.album
 	return render(request, 'musicrate/review_edit.html', {'form': form, 'album': album, 'new': False})
 
-# Replaced with default none for prepopulated
-# def review_new(request):
-# 	if request.method == "POST":
-# 		form = ReviewForm(request.POST)
-# 		if form.is_valid():
-# 		    review = form.save(commit=False)
-# 		    review.author = request.user
-# 		    review.save()
-# 		    return redirect('review_detail', pk=review.pk)
-# 	else:
-# 	    form = ReviewForm()
-# 	return render(request, 'musicrate/review_edit.html', {'form': form})
-
 # Modified to prepopulate with an album
 def review_new(request, pk=None):
 	if request.method == "POST":
 		form = ReviewForm(request.POST)
 		if form.is_valid():
 		    review = form.save(commit=False)
-		    review.author = request.user
+		    review.reviewer = Profile.objects.get(user=request.user)
 		    review.save()
 		    return redirect('review_detail', pk=review.pk)
 	elif pk is not None:
@@ -123,9 +108,9 @@ def create_user(request):
 	return render(request, 'musicrate/signup.html', {'form': form})
 
 def user_detail(request, user):
-	user = get_object_or_404(User, username=user)
-	reviews = Review.objects.filter(author=user).order_by('-updated', '-created')
-	breakdown = Review.objects.filter(author=user).values('rating').annotate(Count('rating'))
+	user = Profile.objects.get(user__username=user)
+	reviews = Review.objects.filter(reviewer=user).order_by('-updated', '-created')
+	breakdown = Review.objects.filter(reviewer=user).values('rating').annotate(Count('rating'))
 	labels = [0,1,2,3,4,5,6,7,8,9,10]
 	data = [0,0,0,0,0,0,0,0,0,0,0]
 	for x in breakdown:
