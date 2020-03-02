@@ -1,0 +1,11 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    {% for album in albums %}
+    <div>
+        <p>{{ album.artist }}</p>
+        <p>{{ album.name }}</p>
+        <hr/>
+    </div>
+    {% endfor %}
+{% endblock %}

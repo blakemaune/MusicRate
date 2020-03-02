@@ -1,0 +1,26 @@
+from django import forms
+from .models import Review, Album
+from django.contrib.auth.models import User
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ('album', 'rating', 'comment',)
+
+class SearchForm(forms.ModelForm):
+	name = forms.CharField(required=False)
+	artist = forms.CharField(required=False)
+	class Meta:
+		model = Album
+		fields = ('name', 'artist')
+
+class UserForm(forms.ModelForm):
+	class Meta:
+		model = User
+		help_texts = {
+			'username': None,
+		}
+		fields = ('first_name', 'last_name', 'username', 'email', 'password')
+		widgets = {
+			'password': forms.PasswordInput(),
+		}

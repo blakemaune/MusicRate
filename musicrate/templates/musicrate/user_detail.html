@@ -1,0 +1,128 @@
+{% extends 'musicrate/base.html' %}
+
+{% block content %}
+    <!-- Header -- display user whose profile is displayed -->
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <hr/>
+            <H2>Reviews by {{ user.username }}</H2>
+            <hr/>
+        </div>
+    </div>
+
+    <!-- Histogram breakdown of ratings per value -->
+    <div class="row">
+        <div class="col-md-12">
+            <canvas id="myChart"></canvas>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.js"></script>
+            <script>
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: {{ breakdown.labels }},
+                        datasets: [{
+                            label: '# of Ratings',
+                            data: {{ breakdown.data }},
+                            backgroundColor: [
+                                'rgba(0, 255, 0, 0.2)',
+                                'rgba(0, 255, 0, 0.2)',
+                                'rgba(0, 255, 0, 0.2)',
+                                'rgba(0, 255, 0, 0.2)',
+                                'rgba(0, 255, 0, 0.2)',
+                                'rgba(0, 255, 0, 0.2)',
+                                'rgba(0, 255, 0, 0.2)',
+                                'rgba(0, 255, 0, 0.2)',
+                                'rgba(0, 255, 0, 0.2)',
+                                'rgba(0, 255, 0, 0.2)',
+                                'rgba(0, 255, 0, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(0, 255, 0, 1)',
+                                'rgba(0, 255, 0, 1)',
+                                'rgba(0, 255, 0, 1)',
+                                'rgba(0, 255, 0, 1)',
+                                'rgba(0, 255, 0, 1)',
+                                'rgba(0, 255, 0, 1)',
+                                'rgba(0, 255, 0, 1)',
+                                'rgba(0, 255, 0, 1)',
+                                'rgba(0, 255, 0, 1)',
+                                'rgba(0, 255, 0, 1)',
+                                'rgba(0, 255, 0, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            </script>
+        </div>
+    </div>
+
+    <!-- DataTable of reviews by this user-->
+    <script>
+        $(document).ready(function() {
+            $('#reviews').DataTable( {
+              "dom": '<"row"<"col-md-12 filter"f>>t<"row"<"col-md-10"i><"col-md-2"p>>'
+            } );
+        } );
+    </script>
+    <table id="reviews" class="table table-hover table-small table-dark table-bordered table-responsive-sm">
+        <thead>
+            <tr>
+                <th>Art</th>
+                <th>Album</th>
+                <th>Artist</th>
+                <th>Rating</th>
+                <th>Comments</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for review in reviews %}
+            <tr class="clickable-row" data-href="/review/{review.pk}">
+                <!-- Album art -->
+                <td>
+                    <a href="/review/{{ review.pk }}">
+                        <img height="125px" width="125px" src="{{ review.album.art_url }}"/>
+                    </a>
+                </td>
+                <!-- Album name -->
+                <td>
+                    <a href="/album/{{ review.album.spotify_id }}">
+                        {{ review.album }}
+                    </a>
+                </td>
+                <!-- Album Artist -->
+                <td>
+                    <a href="/artist/{{ review.album.artist_slug }}">
+                        {{ review.album.artist }}
+                    </a>
+                </td>
+                <!-- Review Rating -->
+                <td>
+                    {{ review.rating }}
+                </td>
+                <!-- Comments (if any) -->
+                <td>
+                    {% if review.comment %}
+                        "{{ review.comment }}"
+                    {% endif %}
+                </td>
+                <!-- Update timestamp -->
+                <td>
+                    {{ review.updated }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

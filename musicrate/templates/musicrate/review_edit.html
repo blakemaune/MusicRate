@@ -1,0 +1,52 @@
+{% extends 'musicrate/base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Edit review</h2>            
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Album image -->
+        <div class="col-md-6">
+                <img height="250px" width="250px" src="{{ album.art_url }}">
+        </div>
+        <!-- Album title and artist -->
+        <div class="col-md-6">
+            <H3>{{ album.title }}</H3>
+            <H4>{{ album.artist }}</H4>
+        </div>
+    </div>
+
+    <form method="POST" class="post-form">
+    {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <H5>
+                    {{ form.album.label }}
+                </H5>
+                {{ form.album }}
+            </div>
+            <div class="col-md-6">
+                <H5>
+                    {{ form.rating.label }}:
+                </H5>
+                {{ form.rating }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <H5>
+                    {{ form.comment.label }}:
+                </H5>
+                {{ form.comment }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-primary" type="submit">Save</button>
+            </div>
+        </div>
+     </form>
+{% endblock %}
