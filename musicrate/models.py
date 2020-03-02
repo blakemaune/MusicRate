@@ -13,6 +13,9 @@ class Profile(models.Model):
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
 
+    def username(self):
+        return self.user.username
+
     def __str__(self):
         return self.user.username
 
@@ -41,6 +44,9 @@ class Review(models.Model):
     comment = models.TextField(null=True, blank=True)
     created = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(default=timezone.now, blank=True, null=True)
+
+    def author(self):
+        return self.reviewer.__str__()
 
     def __str__(self):
         return self.reviewer.__str__() + " rated " + self.album.title + " by " + self.album.artist + " " + self.rating.__str__()

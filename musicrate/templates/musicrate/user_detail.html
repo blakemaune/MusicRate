@@ -79,11 +79,11 @@
         <thead>
             <tr>
                 <th>Art</th>
-                <th>Album</th>
-                <th>Artist</th>
+                <th class="d-none d-sm-table-cell">Album</th>
+                <th class="d-none d-sm-table-cell">Artist</th>
                 <th>Rating</th>
                 <th>Comments</th>
-                <th>Date</th>
+                <th class="d-none d-md-table-cell">Date</th>
             </tr>
         </thead>
         <tbody>
@@ -92,17 +92,17 @@
                 <!-- Album art -->
                 <td>
                     <a href="/review/{{ review.pk }}">
-                        <img height="125px" width="125px" src="{{ review.album.art_url }}"/>
+                        <img height="100px" width="100px" src="{{ review.album.art_url }}"/>
                     </a>
                 </td>
                 <!-- Album name -->
-                <td>
+                <td class="d-none d-sm-table-cell">
                     <a href="/album/{{ review.album.spotify_id }}">
                         {{ review.album }}
                     </a>
                 </td>
                 <!-- Album Artist -->
-                <td>
+                <td class="d-none d-sm-table-cell">
                     <a href="/artist/{{ review.album.artist_slug }}">
                         {{ review.album.artist }}
                     </a>
@@ -118,7 +118,7 @@
                     {% endif %}
                 </td>
                 <!-- Update timestamp -->
-                <td>
+                <td class="d-none d-md-table-cell">
                     {{ review.updated }}
                 </td>
             </tr>

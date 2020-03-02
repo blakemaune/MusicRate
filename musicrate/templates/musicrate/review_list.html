@@ -48,7 +48,7 @@
 		                <th class="d-none d-sm-table-cell">Artist</th>
 		                <th>User</th>
 		                <th>Rating</th>
-		                <th>Comments</th>
+		                <th class="d-none d-sm-table-cell">Comments</th>
 		                <th class="d-none d-sm-table-cell">Updated</th>
 		            </tr>
 		        </thead>
@@ -86,7 +86,7 @@
 		        			</a>
 	        			</td>
 	        			<!-- Comments (if any) -->
-	        			<td>
+	        			<td class="d-none d-sm-table-cell">
 	        				<a href="/review/{{ review.pk }}">
 		        				{% if review.comment %}
 							    	"{{ review.comment }}"
