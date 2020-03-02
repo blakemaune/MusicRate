@@ -32,9 +32,10 @@ class Album(models.Model):
 
 class Review(models.Model):
     class Meta:
-        unique_together = (('author', 'album'),)
+        unique_together = (('reviewer','album'),)
 
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    reviewer = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    # author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     album = models.ForeignKey(Album, on_delete=models.CASCADE)
     rating = models.PositiveIntegerField(default=10, validators=[MinValueValidator(1), MaxValueValidator(10)])
     comment = models.TextField(null=True, blank=True)
@@ -42,7 +43,7 @@ class Review(models.Model):
     updated = models.DateTimeField(default=timezone.now, blank=True, null=True)
 
     def __str__(self):
-        return self.author.__str__() + " rated " + self.album.title + " by " + self.album.artist + " " + self.rating.__str__()
+        return self.reviewer.__str__() + " rated " + self.album.title + " by " + self.album.artist + " " + self.rating.__str__()
 
 # -- START RECEIVERS TO LINK PROFILE MODEL TO USER MODEL --#
 @receiver(post_save, sender=User)
