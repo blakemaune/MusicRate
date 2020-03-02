@@ -1,0 +1,45 @@
+/* MusicRate2 CSS 1 */
+/* /MusicRate2/static/styles.css */
+body{
+	font-family: futura, sans-serif;
+	padding-top: 70px;
+	background-color: #333333;
+	color: white;
+}
+h1, h2, h3, h4, h5, p, a{
+	color: white;
+}
+.table > tbody > tr > td {
+     vertical-align: middle;
+}
+
+.per-page{
+	white-space: nowrap;
+}
+.filter label{
+	display: inline-flex;
+}
+
+.page-header {
+    background-color: #C25100;
+    margin-top: 0;
+}
+.page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
+    color: #ffffff;
+    font-size: 36pt;
+    text-decoration: none;
+}
+.content {
+}
+h1, h2, h3, h4 {
+    font-family: 'futura', sans-serif;
+}
+.review{
+	background-color: #333333;
+}
+.search-result{
+	border: 2px solid white;
+	border-radius: 5px;
+	padding: 5px;
+	margin: 0px;
+}

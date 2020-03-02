@@ -1,0 +1,68 @@
+{% load static %}
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js" integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
+        <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+
+        <title>MusiCrate</title>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-md navbar-default fixed-top navbar-dark bg-dark">
+            <div class="container">
+                <!-- Site head -->
+                <h1 class="navbar-brand"><a href="/">MusiCrate</a></h1>
+
+                <!-- Collapse/expand button -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>    
+
+                <!-- Navbar items/links -->
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <!-- Search -->
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/search">Search</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ml-auto">
+                        {% if request.user.is_authenticated %}
+                        <!-- Welcome message -->
+                        <li class="nav-item active">
+                            <div class="nav-link disabled">Welcome, {{request.user.username}}</div>
+                        </li>
+                        <!-- Logout or Login -->
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/user/{{ request.user.username }}">My Profile</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/logout">Logout</a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/login">Login</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/signup">Sign up</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        </nav>
+
+        <div class="container">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </body>
+</html>

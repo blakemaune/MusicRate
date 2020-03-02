@@ -1,0 +1,108 @@
+{% extends 'musicrate/base.html' %}
+
+{% block content %}
+	<!--
+    {% for review in reviews %}
+    <div class="row review">
+    	<div class="col-sm-4 my-auto text-center">
+    		<img height="125px" width="125px" src="{{ review.album.art_url }}"/>
+    	</div>
+	    <div class="col-sm-6 mx-auto my-auto">
+	    	<a href = "{% url 'review_detail' pk=review.pk %}">
+	        	<H3>{{ review }}</H3>
+	    	</a>
+	    	{% if review.comment %}
+		    	<p>
+		    		"{{ review.comment }}"
+		    	</p>
+	    	{% endif %}
+	    </div>
+	    <div class="col-sm-2 mx-auto my-auto timestamp">
+	    	<p style="font-size: 8pt">Created: </p>
+	    	{% if review.updated %}
+	    	<p style="font-size: 8pt">Updated: {{ review.updated }}</p>
+	    	{% endif %}
+	    </div>
+	</div>
+	<hr/>
+    {% endfor %}
+	-->
+	<script>
+		$(document).ready(function() {
+		    $('#reviews').DataTable( {
+		    	"dom": '<"row"<"col-md-9 per-page"l><"col-md-3 filter"f>>t<"row"<"col-md-9"i><"col-md-3"p>>',
+		    	"oLanguage": 
+		    	{
+		    		"sSearch": "Filter: "
+		    	}
+		    } );
+		} );
+	</script>
+	<div class="row">
+		<div class="col-md-12">
+			<table id="reviews" class="table table-dark table-hover table-bordered table-responsive">
+				<thead>
+		            <tr>
+		                <th>Art</th>
+		                <th class="d-none d-sm-table-cell">Album</th>
+		                <th class="d-none d-sm-table-cell">Artist</th>
+		                <th>User</th>
+		                <th>Rating</th>
+		                <th>Comments</th>
+		                <th class="d-none d-sm-table-cell">Updated</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+	        	{% for review in reviews %}
+	        		<tr>
+	        			<!-- Album art -->
+	        			<td>
+	        				<a href="/review/{{ review.pk }}">
+	        					<img height="75px" width="75px" src="{{ review.album.art_url }}"/>
+	        				</a>
+	        			</td>
+	        			<!-- Album name -->
+	        			<td class="d-none d-sm-table-cell">
+	        				<a href="/album/{{ review.album.spotify_id }}">
+		        				{{ review.album }}
+		        			</a>
+	        			</td>
+	        			<!-- Album Artist -->
+	        			<td class="d-none d-sm-table-cell">
+	        				<a href="/artist/{{ review.album.artist_slug }}">
+	        					{{ review.album.artist }}
+	        				</a>
+	        			</td>
+	        			<!-- Review Author -->
+	        			<td>
+	        				<a href="/user/{{ review.author }}">
+	        					{{ review.author }}
+	        				</a>
+	        			</td>
+	        			<!-- Review Rating -->
+	        			<td>
+	        				<a href="/review/{{ review.pk }}">
+		        				{{ review.rating }}
+		        			</a>
+	        			</td>
+	        			<!-- Comments (if any) -->
+	        			<td>
+	        				<a href="/review/{{ review.pk }}">
+		        				{% if review.comment %}
+							    	"{{ review.comment }}"
+						    	{% endif %}
+						    </a>
+	        			</td>
+	        			<!-- Update timestamp -->
+	        			<td class="d-none d-sm-table-cell">
+	        				<a href="/review/{{ review.pk }}">
+		        				{{ review.updated }}
+		        			</a>
+	        			</td>
+	        		</tr>
+	        	{% endfor %}
+		        </tbody>
+			</table>
+		</div>
+	</div>
+{% endblock %}

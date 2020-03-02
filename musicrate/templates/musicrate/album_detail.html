@@ -1,0 +1,94 @@
+{% extends 'musicrate/base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-8 my-auto">
+            <H4>Album Detail</H4>
+        </div>
+        <div class="col-sm-4 my-auto">  
+            {% if user.is_authenticated %}
+            <a class="btn btn-primary" href="{% url 'review_new' pk=album.pk %}">Review this album</a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Album image -->
+        <div class="col-sm-6">
+            <img height="250px" width="250px" src="{{ album.art_url }}">
+        </div>
+        <!-- Album title and artist -->
+        <div class="col-sm-6">
+            <H3>{{ album.title }}</H3>
+            <a href="/artist/{{ album.artist_slug }}">
+                <H4>{{ album.artist }}</H4>
+            </a>
+            <H4>Average rating: {{ reviews.0.rating__avg }}</H4>
+            <!-- <H4>Average Rating: {{ avg }}</H4> -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <H3>Reviews for {{ album }}:</H3>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#reviews').DataTable( {
+              "dom": '<"row"<"col-md-9 per-page"l><"col-md-3 filter"f>>t<"row"<"col-md-6"i><"col-md-6"p>>'
+            } );
+        } );
+    </script>
+    <div class="row">
+        <div class="col-md-12">
+            <table id="reviews" class="table table-hover table-small table-dark table-bordered table-responsive-sm">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Rating</th>
+                        <th>Comments</th>
+                        <th>Updated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for review in reviews %}
+                    <tr class="clickable-row" data-href="/review/{review.pk}">
+                        <!-- Review Author -->
+                        <td>
+                            <a href="/user/{{ review.author }}">
+                                {{ review.author }}
+                            </a>
+                        </td>
+                        <!-- Review Rating -->
+                        <td>
+                            {{ review.rating }}
+                        </td>
+                        <!-- Comments (if any) -->
+                        <td>
+                            {% if review.comment %}
+                                "{{ review.comment }}"
+                            {% endif %}
+                        </td>
+                        <!-- Update timestamp -->
+                        <td>
+                            {{ review.updated }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- <div class="row">
+        <div class="col-sm-12">
+            {% for review in reviews %}
+                <a href = "{% url 'review_detail' pk=review.pk %}">
+                {{ review }}
+                </a>
+            {% endfor %}
+        </div>
+    </div> -->
+{% endblock %}

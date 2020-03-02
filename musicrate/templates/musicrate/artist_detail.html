@@ -1,0 +1,86 @@
+{% extends 'musicrate/base.html' %}
+
+{% block content %}
+	<div class='row'>
+		<div class='col-md-12 text-center'>
+			<H1>Albums by {{ reviews.0.album.artist }}</H1>
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function() {
+		    $('#reviews').DataTable( {
+		      "dom": '<"row"<"col-md-9 per-page"l><"col-md-3 filter"f>>t<"row"<"col-md-6"i><"col-md-6"p>>'
+		    } );
+		} );
+	</script>
+	<div class="row">
+		<div class="col-md-12">
+			<table id="reviews" class="table table-hover table-dark table-bordered table-responsive-sm">
+				<thead>
+		            <tr>
+		                <th>Art</th>
+		                <th>Album</th>
+		                <th>Average Rating</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+	        	{% for review in reviews %}
+	        		<tr>
+	        			<!-- Album art -->
+	        			<td>
+	        				<a href="/album/{{ review.album.spotify_id }}">
+	        					<img height="125px" width="125px" src="{{ review.album.art_url }}"/>
+	        				</a>
+	        			</td>
+	        			<!-- Album name -->
+	        			<td>
+	        				<a href="/album/{{ review.album.spotify_id }}">
+		        				{{ review.album }}
+		        			</a>
+	        			</td>
+	        			<!-- Average Rating -->
+	        			<td>
+	        				<a href="/album/{{ review.album.spotify_id }}">
+		        				{{ review.rating__avg }}
+		        			</a>
+	        			</td>
+	        		</tr>
+	        	{% endfor %}
+		        </tbody>
+			</table>
+		</div>
+	</div>
+
+	<!-- <div class='row'>
+		<div class='col-md-4 my-auto'>
+			<H3>Album Art</H3>
+		</div>
+		<div class='col-md-4 my-auto'>
+			<h3>Album Title</h3>
+    	</div>
+		<div class='col-md-4 my-auto'>
+			<h3>Average Rating</h3>
+    	</div>	
+	</div>
+    {% for review in reviews %}
+    	<div class='row'>
+    		<div class='col-md-4 my-auto'>
+    			<img width=250px height=250px src='{{ review.album.art_url }}'/>
+    		</div>
+    		<div class='col-md-4 my-auto'>
+    			<h3>
+    				<a href="/album/{{ review.album.spotify_id }}">
+			    		{{ review.album }}
+			    	</a>
+		    	</h3>
+	    	</div>
+    		<div class='col-md-4 my-auto'>
+    			<h3>
+		    		{{ review.rating__avg }}
+		    	</h3>
+	    	</div>
+    	</div>
+    	<hr/>
+    {% endfor %} -->
+{% endblock %}
