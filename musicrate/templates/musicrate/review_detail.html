@@ -6,7 +6,7 @@
             <H2>Review Detail</H2>
         </div>
         <div class="col-md-4">
-            {% if user.is_authenticated and request.user == review.author %}
+            {% if user.is_authenticated and request.user.profile == review.reviewer %}
                 <a class="btn btn-primary" href="{% url 'review_edit' pk=review.pk %}">Edit<br/></a>
             {% endif %}
         </div>

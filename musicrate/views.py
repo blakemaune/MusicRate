@@ -51,8 +51,26 @@ def review_new(request, pk=None):
 	elif pk is not None:
 		# If  album is provided, initialize with album prepopulated
 		album = get_object_or_404(Album, pk=pk)
-		form = ReviewForm(initial={'album': album})
-		return render(request, 'musicrate/review_edit.html', {'form': form, 'album':album})
+
+		# Try to get the existing review, if there is one
+		review = Review.objects.filter(reviewer=request.user.profile, album=album)
+		
+		# If single review exists
+		if len(review) == 1:
+			# Redirect user to edit it
+			review = review[0]
+			return redirect('review_edit', pk=review.pk)
+		# If 0 reviews exist
+		elif len(review) == 0:
+			# Send up form with album prepopulated
+			form = ReviewForm(initial={'album': album})
+			# Render the form
+			return render(request, 'musicrate/review_edit.html', {'form': form, 'album':album})
+		else:
+			# If the number of existing reviews from user for album is not 1 or 0
+			# Something has gone horribly wrong.
+			# Abort!
+			return redirect('review_list')
 	elif pk is None:
 		# If album is not provided, give blank form
 		form = ReviewForm()

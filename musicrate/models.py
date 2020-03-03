@@ -13,6 +13,7 @@ class Profile(models.Model):
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
 
+    # FIX - allows bridging reviewer.username. May remove in favor of __str__()
     def username(self):
         return self.user.username
 
@@ -45,6 +46,8 @@ class Review(models.Model):
     created = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(default=timezone.now, blank=True, null=True)
 
+    # FIX - allows continued use of reivew.author in templates
+    # Consider removing the .__str__(), as returning reviewer to template defaults to toString
     def author(self):
         return self.reviewer.__str__()
 
