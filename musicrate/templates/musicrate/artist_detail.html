@@ -3,7 +3,7 @@
 {% block content %}
 	<div class='row'>
 		<div class='col-md-12 text-center'>
-			<H1>Albums by {{ reviews.0.album.artist }}</H1>
+			<H1>Albums by {{ reviews.0.album__artist }}</H1>
 		</div>
 	</div>
 
@@ -29,14 +29,14 @@
 	        		<tr>
 	        			<!-- Album art -->
 	        			<td>
-	        				<a href="/album/{{ review.album.spotify_id }}">
-	        					<img height="125px" width="125px" src="{{ review.album.art_url }}"/>
+	        				<a href="/album/{{ review.album }}">
+	        					<img height="125px" width="125px" src="{{ review.album__art_url }}"/>
 	        				</a>
 	        			</td>
 	        			<!-- Album name -->
 	        			<td>
-	        				<a href="/album/{{ review.album.spotify_id }}">
-		        				{{ review.album }}
+	        				<a href="/album/{{ review.album }}">
+		        				{{ review.album__title }}
 		        			</a>
 	        			</td>
 	        			<!-- Average Rating -->

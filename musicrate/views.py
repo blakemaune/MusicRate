@@ -96,8 +96,9 @@ def album_detail(request, pk):
 		return redirect('/album/'+pk)
 	else:
 		reviews = Review.objects.filter(album=album)
+		avg = reviews.aggregate(Avg('rating'))['rating__avg']
 		reviews = reviews.annotate(Avg('rating'))
-		return render(request, 'musicrate/album_detail.html', {'album':album, 'reviews':reviews})
+		return render(request, 'musicrate/album_detail.html', {'album':album, 'reviews':reviews, 'avg':avg})
 
 def search(request):
 	if request.method == "POST":
@@ -131,17 +132,19 @@ def user_detail(request, user):
 	breakdown = Review.objects.filter(reviewer=user).values('rating').annotate(Count('rating'))
 	labels = [0,1,2,3,4,5,6,7,8,9,10]
 	data = [0,0,0,0,0,0,0,0,0,0,0]
+	# User's average review
+	avg = reviews.aggregate(Avg('rating'))['rating__avg']
 	for x in breakdown:
 		labels[x['rating']]=x['rating']
 		data[x['rating']]=x['rating__count']
 	breakdown = {'labels':labels, 'data':data}
-	return render(request, 'musicrate/user_detail.html', {'user':user, 'reviews': reviews, 'breakdown':breakdown})
+	return render(request, 'musicrate/user_detail.html', {'user':user, 'reviews': reviews, 'breakdown':breakdown, 'avg':avg})
 
 def artist_detail(request, artist):
 	artist = artist.split('-')
 	artist = ' '.join(artist)
 	reviews = Review.objects.filter(album__artist__iexact=artist)
-	reviews = reviews.annotate(Avg('rating'))
+	reviews = reviews.values('album', 'album__title', 'album__art_url', 'album__artist').distinct().annotate(Avg('rating'))
 	return render(request, 'musicrate/artist_detail.html', {'reviews':reviews});
 
 # -------------------Spotify API Functions---------------------------------------------------------
