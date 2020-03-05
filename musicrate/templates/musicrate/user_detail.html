@@ -11,119 +11,209 @@
         </div>
     </div>
 
-    <!-- Histogram breakdown of ratings per value -->
-    <div class="row">
-        <div class="col-md-12">
-            <canvas id="myChart"></canvas>
-            <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.js"></script>
-            <script>
-                var ctx = document.getElementById('myChart').getContext('2d');
-                var myChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: {{ breakdown.labels }},
-                        datasets: [{
-                            label: '# of Ratings',
-                            data: {{ breakdown.data }},
-                            backgroundColor: [
-                                'rgba(0, 255, 0, 0.2)',
-                                'rgba(0, 255, 0, 0.2)',
-                                'rgba(0, 255, 0, 0.2)',
-                                'rgba(0, 255, 0, 0.2)',
-                                'rgba(0, 255, 0, 0.2)',
-                                'rgba(0, 255, 0, 0.2)',
-                                'rgba(0, 255, 0, 0.2)',
-                                'rgba(0, 255, 0, 0.2)',
-                                'rgba(0, 255, 0, 0.2)',
-                                'rgba(0, 255, 0, 0.2)',
-                                'rgba(0, 255, 0, 0.2)'
-                            ],
-                            borderColor: [
-                                'rgba(0, 255, 0, 1)',
-                                'rgba(0, 255, 0, 1)',
-                                'rgba(0, 255, 0, 1)',
-                                'rgba(0, 255, 0, 1)',
-                                'rgba(0, 255, 0, 1)',
-                                'rgba(0, 255, 0, 1)',
-                                'rgba(0, 255, 0, 1)',
-                                'rgba(0, 255, 0, 1)',
-                                'rgba(0, 255, 0, 1)',
-                                'rgba(0, 255, 0, 1)',
-                                'rgba(0, 255, 0, 1)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
+    <!-- Testing navigation tabs -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="reviews-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">
+                Reviews
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="followers-tab" data-toggle="tab" href="#followers" role="tab" aria-controls="followers" aria-selected="false">
+                Followers
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="following-tab" data-toggle="tab" href="#following" role="tab" aria-controls="following" aria-selected="false">
+                Following
+            </a>
+        </li></ul>
+    <div class="tab-content" id="myTabContent">
+        <!-- Reviews tab content -->
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="reviews-tab">
+            <!-- Histogram breakdown of ratings per value -->
+            <div class="row">
+                <div class="col-md-12">
+                    <canvas id="myChart"></canvas>
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.js"></script>
+                    <script>
+                        var ctx = document.getElementById('myChart').getContext('2d');
+                        var myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: {{ breakdown.labels }},
+                                datasets: [{
+                                    label: '# of Ratings',
+                                    data: {{ breakdown.data }},
+                                    backgroundColor: [
+                                        'rgba(0, 255, 0, 0.2)',
+                                        'rgba(0, 255, 0, 0.2)',
+                                        'rgba(0, 255, 0, 0.2)',
+                                        'rgba(0, 255, 0, 0.2)',
+                                        'rgba(0, 255, 0, 0.2)',
+                                        'rgba(0, 255, 0, 0.2)',
+                                        'rgba(0, 255, 0, 0.2)',
+                                        'rgba(0, 255, 0, 0.2)',
+                                        'rgba(0, 255, 0, 0.2)',
+                                        'rgba(0, 255, 0, 0.2)',
+                                        'rgba(0, 255, 0, 0.2)'
+                                    ],
+                                    borderColor: [
+                                        'rgba(0, 255, 0, 1)',
+                                        'rgba(0, 255, 0, 1)',
+                                        'rgba(0, 255, 0, 1)',
+                                        'rgba(0, 255, 0, 1)',
+                                        'rgba(0, 255, 0, 1)',
+                                        'rgba(0, 255, 0, 1)',
+                                        'rgba(0, 255, 0, 1)',
+                                        'rgba(0, 255, 0, 1)',
+                                        'rgba(0, 255, 0, 1)',
+                                        'rgba(0, 255, 0, 1)',
+                                        'rgba(0, 255, 0, 1)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                maintainAspectRatio: false,
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
                                 }
-                            }]
-                        }
-                    }
-                });
-            </script>
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
+
+            <!-- DataTable of reviews by this user-->
+            <div class="row">
+                <div class="col-md-12">
+                    <table id="reviews" class="table table-hover table-small table-dark table-bordered table-responsive-sm">
+                        <thead>
+                            <tr>
+                                <th>Art</th>
+                                <th class="d-none d-sm-table-cell">Album</th>
+                                <th class="d-none d-sm-table-cell">Artist</th>
+                                <th>Rating</th>
+                                <th>Comments</th>
+                                <th class="d-none d-md-table-cell">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for review in reviews %}
+                            <tr class="clickable-row" data-href="/review/{review.pk}">
+                                <!-- Album art -->
+                                <td>
+                                    <a href="/review/{{ review.pk }}">
+                                        <img height="100px" width="100px" src="{{ review.album.art_url }}"/>
+                                    </a>
+                                </td>
+                                <!-- Album name -->
+                                <td class="d-none d-sm-table-cell">
+                                    <a href="/album/{{ review.album.spotify_id }}">
+                                        {{ review.album }}
+                                    </a>
+                                </td>
+                                <!-- Album Artist -->
+                                <td class="d-none d-sm-table-cell">
+                                    <a href="/artist/{{ review.album.artist_slug }}">
+                                        {{ review.album.artist }}
+                                    </a>
+                                </td>
+                                <!-- Review Rating -->
+                                <td>
+                                    {{ review.rating }}
+                                </td>
+                                <!-- Comments (if any) -->
+                                <td>
+                                    {% if review.comment %}
+                                        "{{ review.comment }}"
+                                    {% endif %}
+                                </td>
+                                <!-- Update timestamp -->
+                                <td class="d-none d-md-table-cell">
+                                    {{ review.updated }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <script>
+                        $(document).ready(function() {
+                            $('#reviews').DataTable( {
+                              "dom": 'ft'
+                            } );
+                        } );
+                    </script>
+                </div>
+            </div>
+        </div>
+        <!-- Followers tab content -->
+        <div class="tab-pane fade" id="followers" role="tabpanel" aria-labelledby="followers-tab">
+            <!-- DataTable of followers of this user-->
+            <table class="table table-hover table-small table-dark table-bordered table-responsive-sm">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for follower in user.followed_by.all %}
+                    <tr>
+                        <!-- A nice puppy -->
+                        <td>
+                            <a href="/user/{{ follower }}">
+                                <img height="100px" width="100px" src="https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg"/>
+                            </a>
+                        </td>
+                        <!-- Follower name -->
+                        <td>
+                            <a href="/user/{{ follower }}">
+                                {{ follower }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!-- Following tab content -->
+        <div class="tab-pane fade" id="following" role="tabpanel" aria-labelledby="following-tab">
+            <!-- DataTable of followers of this user-->
+            <table class="table table-hover table-small table-dark table-bordered table-responsive-sm">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for follow in user.follows.all %}
+                    <tr>
+                        <!-- A nice puppy -->
+                        <td>
+                            <a href="/user/{{ follow }}">
+                                <img height="100px" width="100px" src="https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg"/>
+                            </a>
+                        </td>
+                        <!-- Follow name -->
+                        <td>
+                            <a href="/user/{{ follow }}">
+                                {{ follow }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <!-- DataTable of reviews by this user-->
-    <script>
-        $(document).ready(function() {
-            $('#reviews').DataTable( {
-              "dom": '<"row"<"col-md-12 filter"f>>t<"row"<"col-md-10"i><"col-md-2"p>>'
-            } );
-        } );
-    </script>
-    <table id="reviews" class="table table-hover table-small table-dark table-bordered table-responsive-sm">
-        <thead>
-            <tr>
-                <th>Art</th>
-                <th class="d-none d-sm-table-cell">Album</th>
-                <th class="d-none d-sm-table-cell">Artist</th>
-                <th>Rating</th>
-                <th>Comments</th>
-                <th class="d-none d-md-table-cell">Date</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for review in reviews %}
-            <tr class="clickable-row" data-href="/review/{review.pk}">
-                <!-- Album art -->
-                <td>
-                    <a href="/review/{{ review.pk }}">
-                        <img height="100px" width="100px" src="{{ review.album.art_url }}"/>
-                    </a>
-                </td>
-                <!-- Album name -->
-                <td class="d-none d-sm-table-cell">
-                    <a href="/album/{{ review.album.spotify_id }}">
-                        {{ review.album }}
-                    </a>
-                </td>
-                <!-- Album Artist -->
-                <td class="d-none d-sm-table-cell">
-                    <a href="/artist/{{ review.album.artist_slug }}">
-                        {{ review.album.artist }}
-                    </a>
-                </td>
-                <!-- Review Rating -->
-                <td>
-                    {{ review.rating }}
-                </td>
-                <!-- Comments (if any) -->
-                <td>
-                    {% if review.comment %}
-                        "{{ review.comment }}"
-                    {% endif %}
-                </td>
-                <!-- Update timestamp -->
-                <td class="d-none d-md-table-cell">
-                    {{ review.updated }}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+
+
 {% endblock %}
