@@ -10,7 +10,8 @@ urlpatterns = [
     path('review/new/<str:pk>/', views.review_new, name='review_new'), # Create a new review
     path('search/', views.search, name='search'), # Create a new review
     path('album/<str:pk>', views.album_detail, name='album_detail'), # Detail view of single album
-    path('user/<str:user>', views.user_detail, name='user_detail'),
+    path('user/<str:user>/', views.user_detail, name='user_detail'),
+    path('user/<str:user>/follow/', views.user_follow, name='user_follow'),
     path('artist/<slug:artist>/', views.artist_detail, name='artist_detail'),
     # Signup, login and logout urls
     path('signup/', views.create_user, name='new_user'), # Sign up for an account

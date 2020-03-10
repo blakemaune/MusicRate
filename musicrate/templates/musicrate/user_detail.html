@@ -7,6 +7,42 @@
             <hr/>
             <H2>Reviews by {{ user.username }}</H2>
             <H4>Average rating {{ avg }}</H4>
+            <!-- Toggle following -->
+            {% if request.user.is_authenticated %}
+                <!-- Script to toggle follow status -->
+                <script>
+                    $(document).ready(function() {
+                        $('.follow-button').click(function() {
+                            var newText = "newtext";
+                            $.get($(this).data('url'), function(response) {
+                                alert(response['message']);
+                            });
+                            $(this).toggleClass('btn-danger');
+                            $(this).toggleClass('btn-primary');
+                            var text = $(this).text();
+                            if(text=="Follow"){
+                                $(this).text("Unfollow");
+                            }else{
+                                $(this).text("Follow");
+                            }
+                        });
+                    });
+                </script>
+                <button 
+                type="button" 
+                class="btn follow-button {% if request.user.profile in user.followed_by.all %}btn-danger{% else %}btn-primary{% endif %}" 
+                data-toggle="button" 
+                aria-pressed="false" 
+                data-url="{% url 'user_follow' user.username %}"
+                >
+                    {% if request.user.profile in user.followed_by.all %}
+                        Unfollow
+                    {% else %}
+                        Follow
+                    {% endif %}
+                </button>
+            {% endif %}
+            <!-- Toggle following -->
             <hr/>
         </div>
     </div>

@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import *
 from .forms import ReviewForm, SearchForm, UserForm
 from .spotify_api_util import getTokenData
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db.models import Avg, Count
@@ -139,6 +139,24 @@ def user_detail(request, user):
 		data[x['rating']]=x['rating__count']
 	breakdown = {'labels':labels, 'data':data}
 	return render(request, 'musicrate/user_detail.html', {'user':user, 'reviews': reviews, 'breakdown':breakdown, 'avg':avg})
+
+def user_follow(request, user):
+	follower = Profile.objects.get(user=request.user)
+	followee = Profile.objects.get(user__username=user)
+	
+	data = {}
+	if follower in followee.followed_by.all():
+		# Unfollow
+		follower.follows.remove(followee);
+		data['newbutton'] = "Follow"
+		data['message'] = "No longer following " + followee.__str__()
+	else:
+		# Follow
+		follower.follows.add(followee);
+		data['newbutton'] = "Unfollow"
+		data['message'] = "Now following " + followee.__str__()
+
+	return JsonResponse(data, safe=False)
 
 def artist_detail(request, artist):
 	artist = artist.split('-')
