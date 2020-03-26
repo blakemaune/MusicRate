@@ -9,6 +9,22 @@ body{
 h1, h2, h3, h4, h5, p, a{
 	color: white;
 }
+.fullwidth{
+	width=100%;
+}
+
+.nav{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.nav-pills{
+	background: rgba(255,255,255,0.1);
+	margin: .25rem;
+    border-radius: .25rem;
+    padding: .25rem;
+}
+
 .table > tbody > tr > td {
      vertical-align: middle;
 }
