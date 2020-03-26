@@ -14,7 +14,10 @@ def album_list(request):
 
 # Homepage. List of all reviews
 def review_list(request):
-	feed_reviews = Review.objects.filter(reviewer__in=request.user.profile.follows.all()).order_by('-created')[:10]
+	if(request.user.is_authenticated):
+		feed_reviews = Review.objects.filter(reviewer__in=request.user.profile.follows.all()).order_by('-created')[:10]
+	else:
+		feed_reviews = None
 	top_reviews = Review.objects.order_by('-rating', '-updated')[:10]
 	new_reviews = Review.objects.order_by('-updated')[:10]
 	return render(request, 'musicrate/review_list.html', {'feed_reviews':feed_reviews,'top_reviews':top_reviews, 'new_reviews':new_reviews})

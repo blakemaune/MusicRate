@@ -37,9 +37,11 @@
 	</script>
 	<!-- Nav tabs/pills -->
 	<ul class="nav nav-pills nav-justified">
+		{% if feed_reviews is not None %}
 		<li class="nav-item">
 			<a class="nav-link active" data-toggle="tab" href="#my_feed">My Feed</a>
 		</li>
+		{% endif %}
 		<li class="nav-item">
 			<a class="nav-link" data-toggle="tab" href="#top_reviews">Top Reviews</a>
 		</li>
@@ -49,6 +51,7 @@
 	</ul>
 	<!-- Tab panes -->
 	<div class="tab-content">
+		{% if feed_reviews is not None %}
 		<!-- MY FEED -->
 		<div class="tab-pane container active" id="my_feed">
 			<div class='col-md-12 text-center'>
@@ -123,8 +126,10 @@
 				<h6>My feed - view all</h6>
 			</div>
 		</div>
+		{% endif %}
 		<!-- TOP REVIEWS -->
-		<div class="tab-pane container fade" id="top_reviews">
+		<div class="tab-pane container 
+		{% if feed_reviews is not None %}fade{% else %}active{% endif %}" id="top_reviews">
 			<div class='col-md-12 text-center'>
 				<h4>Top Reviews</h4>
 				<h5>The cream of the crop - the people's choices!</h5>
