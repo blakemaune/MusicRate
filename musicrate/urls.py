@@ -3,7 +3,7 @@ from . import views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('', views.review_list, name='review_list'), # Homepage -- list of all reviews
+    path('', views.reviews_home, name='homepage'), # Homepage -- list of all reviews
     path('review/<int:pk>/', views.review_detail, name='review_detail'), # Detail view of single review
     path('review/<int:pk>/edit/', views.review_edit, name='review_edit'), # Edit an existing review
     path('review/new/', views.review_new, name='review_new'), # Create a new review
@@ -13,6 +13,10 @@ urlpatterns = [
     path('user/<str:user>/', views.user_detail, name='user_detail'),
     path('user/<str:user>/follow/', views.user_follow, name='user_follow'),
     path('artist/<slug:artist>/', views.artist_detail, name='artist_detail'),
+    path('reviews/all/', views.reviews_all, name='reviews_all'), # MIRROR HOMEPAGE
+    path('reviews/feed/', views.reviews_feed, name='reviews_feed'), # Feed of follow reviews
+    path('reviews/recent/', views.reviews_recent, name='reviews_recent'), # List of recent reviews
+    path('reviews/top/', views.reviews_top, name='reviews_top'), # List of top reviews
     # Signup, login and logout urls
     path('signup/', views.create_user, name='new_user'), # Sign up for an account
     path('login/', auth_views.LoginView.as_view(template_name='musicrate/login.html'), name='login'),

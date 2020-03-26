@@ -29,10 +29,10 @@ h1, h2, h3, h4, h5, p, a{
      vertical-align: middle;
 }
 
-.per-page{
+.dataTables_length label{
 	white-space: nowrap;
 }
-.filter label{
+.dataTables_filter label{
 	display: inline-flex;
 }
 
