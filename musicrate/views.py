@@ -12,16 +12,6 @@ from django.db.models import Avg, Count
 def album_list(request):
     return render(request, 'musicrate/album_list.html', {})
 
-# Homepage. List of all reviews
-def review_list(request):
-	if(request.user.is_authenticated):
-		feed_reviews = Review.objects.filter(reviewer__in=request.user.profile.follows.all()).order_by('-created')[:10]
-	else:
-		feed_reviews = None
-	top_reviews = Review.objects.order_by('-rating', '-updated')[:10]
-	new_reviews = Review.objects.order_by('-updated')[:10]
-	return render(request, 'musicrate/review_list.html', {'feed_reviews':feed_reviews,'top_reviews':top_reviews, 'new_reviews':new_reviews})
-
 def review_detail(request, pk):
 	review = get_object_or_404(Review, pk=pk)
 	return render(request, 'musicrate/review_detail.html', {'review':review})
@@ -170,6 +160,45 @@ def artist_detail(request, artist):
 	reviews = reviews.values('album', 'album__title', 'album__art_url', 'album__artist').distinct().annotate(Avg('rating'))
 	return render(request, 'musicrate/artist_detail.html', {'reviews':reviews});
 
+# The Homepage
+def reviews_home(request):
+	if(request.user.is_authenticated):
+		feed_reviews = Review.objects.filter(reviewer__in=request.user.profile.follows.all()).order_by('-created')[:10]
+	else:
+		feed_reviews = None
+	top_reviews = Review.objects.order_by('-rating', '-updated')[:10]
+	new_reviews = Review.objects.order_by('-updated')[:10]
+
+	return render(request, 'musicrate/homepage.html', {'feed_reviews':feed_reviews,'top_reviews':top_reviews, 'new_reviews':new_reviews})
+
+def reviews_feed(request):
+	if(request.user.is_authenticated):
+		reviews = Review.objects.filter(reviewer__in=request.user.profile.follows.all()).order_by('-created')
+		title = "My Feed"
+		description = "The latest reviews important to you"
+		return render(request, 'musicrate/review_list.html', {'reviews':reviews, 'title':title,'description':description})
+	else:
+		return redirect('/login')
+
+# List of all reviews
+def reviews_all(request):
+	reviews = Review.objects.all()
+	title = "All reviews"
+	description = "In no particular order"
+	return render(request, 'musicrate/review_list.html', {'reviews':reviews, 'title':title,'description':description})
+
+def reviews_recent(request):
+	reviews = Review.objects.order_by('-updated')
+	title = "Recent Reviews"
+	description = "Only the freshest"
+	return render(request, 'musicrate/review_list.html', {'reviews':reviews, 'title':title,'description':description})
+
+def reviews_top(request):
+	reviews = Review.objects.order_by('-rating', '-updated')
+	title = "Top Reviews"
+	description = "Solid gold hits"
+	return render(request, 'musicrate/review_list.html', {'reviews':reviews, 'title':title,'description':description})
+
 # -------------------Spotify API Functions---------------------------------------------------------
 
 # Takes search input from user, builds a URL to hit spotify API
@@ -204,7 +233,10 @@ def getResults(queryURL, token):
 def trimResults(albums):
 	results = []
 	for album in albums['albums']['items']:
-		result = {'name':album['name'],'artist':album['artists'][0]['name'], 'id':album['id'], 'img':album['images'][0]['url'], 'link':album['external_urls']['spotify']}
+		# Get high-res album art
+		# result = {'name':album['name'],'artist':album['artists'][0]['name'], 'id':album['id'], 'img':album['images'][0]['url'], 'link':album['external_urls']['spotify']}
+		# Get med-res album art
+		result = {'name':album['name'],'artist':album['artists'][0]['name'], 'id':album['id'], 'img':album['images'][1]['url'], 'link':album['external_urls']['spotify']}
 		results.append(result)
 	return results
 
