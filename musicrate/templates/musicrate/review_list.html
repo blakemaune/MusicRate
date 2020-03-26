@@ -1,36 +1,33 @@
 {% extends 'musicrate/base.html' %}
 
 {% block content %}
-	<!--
-    {% for review in reviews %}
-    <div class="row review">
-    	<div class="col-sm-4 my-auto text-center">
-    		<img height="125px" width="125px" src="{{ review.album.art_url }}"/>
-    	</div>
-	    <div class="col-sm-6 mx-auto my-auto">
-	    	<a href = "{% url 'review_detail' pk=review.pk %}">
-	        	<H3>{{ review }}</H3>
-	    	</a>
-	    	{% if review.comment %}
-		    	<p>
-		    		"{{ review.comment }}"
-		    	</p>
-	    	{% endif %}
-	    </div>
-	    <div class="col-sm-2 mx-auto my-auto timestamp">
-	    	<p style="font-size: 8pt">Created: </p>
-	    	{% if review.updated %}
-	    	<p style="font-size: 8pt">Updated: {{ review.updated }}</p>
-	    	{% endif %}
-	    </div>
-	</div>
-	<hr/>
-    {% endfor %}
-	-->
+	<!-- Script handling data tables -->
 	<script>
 		$(document).ready(function() {
-		    $('#reviews').DataTable( {
-		    	"dom": '<"row"<"col-md-9 per-page"l><"col-md-3 filter"f>>t<"row"<"col-md-9"i><"col-md-3"p>>',
+			$('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
+			   $($.fn.dataTable.tables(true)).css('width', '');
+			   $($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
+			});
+
+		    $('#my_feed_table').DataTable( {
+		    	// "dom": '<"row"<"col-md-9 per-page"l><"col-md-3 filter"f>>t<"row"<"col-md-9"i><"col-md-3"p>>',
+		    	"dom": 't',
+		    	"oLanguage": 
+		    	{
+		    		"sSearch": "Filter: "
+		    	}
+		    } );
+		    $('#top_reviews_table').DataTable( {
+		    	// "dom": '<"row"<"col-md-9 per-page"l><"col-md-3 filter"f>>t<"row"<"col-md-9"i><"col-md-3"p>>',
+		    	"dom": 't',
+		    	"oLanguage": 
+		    	{
+		    		"sSearch": "Filter: "
+		    	}
+		    } );
+		    $('#new_reviews_table').DataTable( {
+		    	// "dom": '<"row"<"col-md-9 per-page"l><"col-md-3 filter"f>>t<"row"<"col-md-9"i><"col-md-3"p>>',
+		    	"dom": 't',
 		    	"oLanguage": 
 		    	{
 		    		"sSearch": "Filter: "
@@ -38,9 +35,28 @@
 		    } );
 		} );
 	</script>
-	<div class="row">
-		<div class="col-md-12">
-			<table id="reviews" class="table table-dark table-hover table-bordered table-responsive">
+	<!-- Nav tabs/pills -->
+	<ul class="nav nav-pills nav-justified">
+		<li class="nav-item">
+			<a class="nav-link active" data-toggle="tab" href="#my_feed">My Feed</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-toggle="tab" href="#top_reviews">Top Reviews</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-toggle="tab" href="#new_reviews">New Reviews</a>
+		</li>
+	</ul>
+	<!-- Tab panes -->
+	<div class="tab-content">
+		<!-- MY FEED -->
+		<div class="tab-pane container active" id="my_feed">
+			<div class='col-md-12 text-center'>
+				<h4>My Feed</h4>
+				<h5>The latest reviews from the reviewers you follow</h5>
+			</div>
+			<!-- List reviews by my follows -->
+			<table id="my_feed_table" class="table table-dark table-hover table-bordered">
 				<thead>
 		            <tr>
 		                <th>Art</th>
@@ -53,7 +69,7 @@
 		            </tr>
 		        </thead>
 		        <tbody>
-	        	{% for review in reviews %}
+	        	{% for review in feed_reviews %}
 	        		<tr>
 	        			<!-- Album art -->
 	        			<td>
@@ -103,6 +119,155 @@
 	        	{% endfor %}
 		        </tbody>
 			</table>
+			<div class='col-md-12 text-center'>
+				<h6>My feed - view all</h6>
+			</div>
+		</div>
+		<!-- TOP REVIEWS -->
+		<div class="tab-pane container fade" id="top_reviews">
+			<div class='col-md-12 text-center'>
+				<h4>Top Reviews</h4>
+				<h5>The cream of the crop - the people's choices!</h5>
+			</div>
+			<table id="top_reviews_table" class="table table-dark table-hover table-bordered">
+				<thead>
+		            <tr>
+		                <th>Art</th>
+		                <th class="d-none d-sm-table-cell">Album</th>
+		                <th class="d-none d-sm-table-cell">Artist</th>
+		                <th>User</th>
+		                <th>Rating</th>
+		                <th class="d-none d-sm-table-cell">Comments</th>
+		                <th class="d-none d-sm-table-cell">Updated</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+	        	{% for review in top_reviews %}
+	        		<tr>
+	        			<!-- Album art -->
+	        			<td>
+	        				<a href="/review/{{ review.pk }}">
+	        					<img height="75px" width="75px" src="{{ review.album.art_url }}"/>
+	        				</a>
+	        			</td>
+	        			<!-- Album name -->
+	        			<td class="d-none d-sm-table-cell">
+	        				<a href="/album/{{ review.album.spotify_id }}">
+		        				{{ review.album }}
+		        			</a>
+	        			</td>
+	        			<!-- Album Artist -->
+	        			<td class="d-none d-sm-table-cell">
+	        				<a href="/artist/{{ review.album.artist_slug }}">
+	        					{{ review.album.artist }}
+	        				</a>
+	        			</td>
+	        			<!-- Review Author -->
+	        			<td>
+	        				<a href="/user/{{ review.author }}">
+	        					{{ review.author }}
+	        				</a>
+	        			</td>
+	        			<!-- Review Rating -->
+	        			<td>
+	        				<a href="/review/{{ review.pk }}">
+		        				{{ review.rating }}
+		        			</a>
+	        			</td>
+	        			<!-- Comments (if any) -->
+	        			<td class="d-none d-sm-table-cell">
+	        				<a href="/review/{{ review.pk }}">
+		        				{% if review.comment %}
+							    	"{{ review.comment }}"
+						    	{% endif %}
+						    </a>
+	        			</td>
+	        			<!-- Update timestamp -->
+	        			<td class="d-none d-sm-table-cell">
+	        				<a href="/review/{{ review.pk }}">
+		        				{{ review.updated }}
+		        			</a>
+	        			</td>
+	        		</tr>
+	        	{% endfor %}
+		        </tbody>
+			</table>
+			<div class='col-md-12 text-center'>
+				<h6>Top reviews - view all</h6>
+			</div>
+		</div>
+		<!-- NEW REVIEWS -->
+		<div class="tab-pane container fade" id="new_reviews">
+			<div class='col-md-12 text-center'>
+				<h4>New Reviews</h4>
+				<h5>The freshest takes on the platform</h5>
+			</div>
+			<table id="new_reviews_table" class="table table-dark table-hover table-bordered">
+				<thead>
+		            <tr>
+		                <th>Art</th>
+		                <th class="d-none d-sm-table-cell">Album</th>
+		                <th class="d-none d-sm-table-cell">Artist</th>
+		                <th>User</th>
+		                <th>Rating</th>
+		                <th class="d-none d-sm-table-cell">Comments</th>
+		                <th class="d-none d-sm-table-cell">Updated</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+	        	{% for review in new_reviews %}
+	        		<tr>
+	        			<!-- Album art -->
+	        			<td>
+	        				<a href="/review/{{ review.pk }}">
+	        					<img height="75px" width="75px" src="{{ review.album.art_url }}"/>
+	        				</a>
+	        			</td>
+	        			<!-- Album name -->
+	        			<td class="d-none d-sm-table-cell">
+	        				<a href="/album/{{ review.album.spotify_id }}">
+		        				{{ review.album }}
+		        			</a>
+	        			</td>
+	        			<!-- Album Artist -->
+	        			<td class="d-none d-sm-table-cell">
+	        				<a href="/artist/{{ review.album.artist_slug }}">
+	        					{{ review.album.artist }}
+	        				</a>
+	        			</td>
+	        			<!-- Review Author -->
+	        			<td>
+	        				<a href="/user/{{ review.author }}">
+	        					{{ review.author }}
+	        				</a>
+	        			</td>
+	        			<!-- Review Rating -->
+	        			<td>
+	        				<a href="/review/{{ review.pk }}">
+		        				{{ review.rating }}
+		        			</a>
+	        			</td>
+	        			<!-- Comments (if any) -->
+	        			<td class="d-none d-sm-table-cell">
+	        				<a href="/review/{{ review.pk }}">
+		        				{% if review.comment %}
+							    	"{{ review.comment }}"
+						    	{% endif %}
+						    </a>
+	        			</td>
+	        			<!-- Update timestamp -->
+	        			<td class="d-none d-sm-table-cell">
+	        				<a href="/review/{{ review.pk }}">
+		        				{{ review.updated }}
+		        			</a>
+	        			</td>
+	        		</tr>
+	        	{% endfor %}
+		        </tbody>
+			</table>
+			<div class='col-md-12 text-center'>
+				<h6>New reviews - view all</h6>
+			</div>
 		</div>
 	</div>
 {% endblock %}

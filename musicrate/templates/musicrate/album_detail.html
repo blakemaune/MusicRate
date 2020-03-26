@@ -42,7 +42,7 @@
     </script>
     <div class="row">
         <div class="col-md-12">
-            <table id="reviews" class="table table-hover table-small table-dark table-bordered table-responsive-sm">
+            <table id="reviews" class="table table-hover table-small table-dark table-bordered">
                 <thead>
                     <tr>
                         <th>User</th>
@@ -62,7 +62,9 @@
                         </td>
                         <!-- Review Rating -->
                         <td>
-                            {{ review.rating }}
+                            <a href="/review/{{ review.pk }}">
+                                {{ review.rating }}
+                            </a>
                         </td>
                         <!-- Comments (if any) -->
                         <td>

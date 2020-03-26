@@ -1,4 +1,4 @@
-import requests, json
+import requests, json, datetime
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import *
 from .forms import ReviewForm, SearchForm, UserForm
@@ -14,8 +14,10 @@ def album_list(request):
 
 # Homepage. List of all reviews
 def review_list(request):
-	reviews = Review.objects.order_by('-created')
-	return render(request, 'musicrate/review_list.html', {'reviews':reviews})
+	feed_reviews = Review.objects.filter(reviewer__in=request.user.profile.follows.all()).order_by('-created')[:10]
+	top_reviews = Review.objects.order_by('-rating', '-updated')[:10]
+	new_reviews = Review.objects.order_by('-updated')[:10]
+	return render(request, 'musicrate/review_list.html', {'feed_reviews':feed_reviews,'top_reviews':top_reviews, 'new_reviews':new_reviews})
 
 def review_detail(request, pk):
 	review = get_object_or_404(Review, pk=pk)

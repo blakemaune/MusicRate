@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-sm-12 text-center">
             <hr/>
-            <H2>Reviews by {{ user.username }}</H2>
+            <H2>{{ user.username }}'s profile</H2>
             <H4>Average rating {{ avg }}</H4>
             <!-- Toggle following -->
             {% if request.user.is_authenticated %}
@@ -48,7 +48,7 @@
     </div>
 
     <!-- Testing navigation tabs -->
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <ul class="nav nav-pills nav-justified bg-dark" id="myTab" role="tablist">
         <li class="nav-item">
             <a class="nav-link active" id="reviews-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">
                 Reviews
@@ -128,7 +128,7 @@
             <!-- DataTable of reviews by this user-->
             <div class="row">
                 <div class="col-md-12">
-                    <table id="reviews" class="table table-hover table-small table-dark table-bordered table-responsive-sm">
+                    <table id="reviews" class="table table-hover table-small table-dark table-bordered">
                         <thead>
                             <tr>
                                 <th>Art</th>
@@ -191,7 +191,7 @@
         <!-- Followers tab content -->
         <div class="tab-pane fade" id="followers" role="tabpanel" aria-labelledby="followers-tab">
             <!-- DataTable of followers of this user-->
-            <table class="table table-hover table-small table-dark table-bordered table-responsive-sm">
+            <table class="table table-hover table-small table-dark table-bordered">
                 <thead>
                     <tr>
                         <th>Image</th>
@@ -221,7 +221,7 @@
         <!-- Following tab content -->
         <div class="tab-pane fade" id="following" role="tabpanel" aria-labelledby="following-tab">
             <!-- DataTable of followers of this user-->
-            <table class="table table-hover table-small table-dark table-bordered table-responsive-sm">
+            <table class="table table-hover table-small table-dark table-bordered">
                 <thead>
                     <tr>
                         <th>Image</th>
