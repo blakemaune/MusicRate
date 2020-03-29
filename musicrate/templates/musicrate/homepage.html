@@ -1,47 +1,78 @@
 {% extends 'musicrate/base.html' %}
 
 {% block content %}
-	<!-- Script handling data tables -->
-	<script>
-		$(document).ready(function() {
-			$('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
-			   $($.fn.dataTable.tables(true)).css('width', '');
-			   $($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
-			});
-
-		    $('#my_feed_table').DataTable( {
-		    	// "dom": '<"row"<"col-md-9 per-page"l><"col-md-3 filter"f>>t<"row"<"col-md-9"i><"col-md-3"p>>',
-		    	"dom": 't',
-		    	"oLanguage": 
-		    	{
-		    		"sSearch": "Filter: "
-		    	}
-		    } );
-		    $('#top_reviews_table').DataTable( {
-		    	// "dom": '<"row"<"col-md-9 per-page"l><"col-md-3 filter"f>>t<"row"<"col-md-9"i><"col-md-3"p>>',
-		    	"dom": 't',
-		    	"oLanguage": 
-		    	{
-		    		"sSearch": "Filter: "
-		    	}
-		    } );
-		    $('#new_reviews_table').DataTable( {
-		    	// "dom": '<"row"<"col-md-9 per-page"l><"col-md-3 filter"f>>t<"row"<"col-md-9"i><"col-md-3"p>>',
-		    	"dom": 't',
-		    	"oLanguage": 
-		    	{
-		    		"sSearch": "Filter: "
-		    	}
-		    } );
-		} );
-	</script>
+	
 
 	<div class='row'>
 		<div class='col-md-12 text-center'>
-			<H1>MusiCrate</H1>
-			<H2>Welcome home.</H2>
+			<H3>MusiCrate</H3>
+			<H4>Welcome home.</H4>
 		</div>
 	</div>
+	<!-- Homepage carousel -->
+	<div id="homepageCarousel" class="carousel slide" data-ride="carousel">
+		<div class="carousel-inner">
+			{% if not user.is_authenticated %}
+			<div class="carousel-item {% if not user.is_authenticated %}active{% endif %}">
+				<a href="{% url 'new_user' %}">
+					<img class="d-block w-100" src="https://images.pexels.com/photos/21148/pexels-photo.jpg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" alt="Second slide">
+					<div class="carousel-caption">
+					    <h5>Create an account</h5>
+					    <p>Users can create reviews, follow their friends, and more</p>
+					</div>
+				</a>
+			</div>
+			<div class="carousel-item">
+
+				<a href="{% url 'login' %}">
+					<img class="d-block w-100" src="https://images.pexels.com/photos/164853/pexels-photo-164853.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" alt="Second slide">
+					<div class="carousel-caption">
+						    <h5>Log in</h5>
+						    <p>Existing users - log in to use full features!</p>
+					</div>
+				</a>
+			</div>
+			{% endif %}
+			<div class="carousel-item {% if user.is_authenticated %}active{% endif %}">
+				<a href="{% url 'album_search' %}">
+					<img class="d-block w-100" src="https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?cs=srgb&dl=people-at-concert-1105666.jpg&fm=jpg" alt="First slide">
+					<div class="carousel-caption">
+					    <h5>Review an album</h5>
+					    <p>Search for a work to review - see other users' reviews and listen on Spotify</p>
+					</div>
+				</a>
+			</div>
+			{% if user.is_authenticated %}
+			<div class="carousel-item">
+				<a href="/user/{{ request.user.username }}">
+					<img class="d-block w-100" src="https://images.pexels.com/photos/1389429/pexels-photo-1389429.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" alt="Second slide">
+					<div class="carousel-caption">
+					    <h5>View your profile</h5>
+					    <p>See your metrics, revisit old reviews, see who's following you and more</p>
+					 </div>
+				</a>
+			</div>
+			{% endif %}
+			<div class="carousel-item">
+				<a href="{% url 'profile_search' %}">
+					<img class="d-block w-100" src="https://images.pexels.com/photos/144428/pexels-photo-144428.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="Third slide">
+					<div class="carousel-caption">
+					    <h5>Find your friends</h5>
+					    <p>Search a username, view their profile, follow other users be added to your feed!</p>
+					 </div>
+				</a>
+			</div>
+		</div>
+		<a class="carousel-control-prev" href="#homepageCarousel" role="button" data-slide="prev">
+			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+			<span class="sr-only">Previous</span>
+		</a>
+		<a class="carousel-control-next" href="#homepageCarousel" role="button" data-slide="next">
+			<span class="carousel-control-next-icon" aria-hidden="true"></span>
+			<span class="sr-only">Next</span>
+		</a>
+	</div>
+
 
 	<!-- Nav tabs/pills -->
 	<ul class="nav nav-pills nav-justified">
@@ -289,4 +320,39 @@
 			</div>
 		</div>
 	</div>
+
+	<!-- Script handling data tables -->
+	<script>
+		$(document).ready(function() {
+			$('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
+			   $($.fn.dataTable.tables(true)).css('width', '');
+			   $($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
+			});
+
+		    $('#my_feed_table').DataTable( {
+		    	// "dom": '<"row"<"col-md-9 per-page"l><"col-md-3 filter"f>>t<"row"<"col-md-9"i><"col-md-3"p>>',
+		    	"dom": 't',
+		    	"oLanguage": 
+		    	{
+		    		"sSearch": "Filter: "
+		    	}
+		    } );
+		    $('#top_reviews_table').DataTable( {
+		    	// "dom": '<"row"<"col-md-9 per-page"l><"col-md-3 filter"f>>t<"row"<"col-md-9"i><"col-md-3"p>>',
+		    	"dom": 't',
+		    	"oLanguage": 
+		    	{
+		    		"sSearch": "Filter: "
+		    	}
+		    } );
+		    $('#new_reviews_table').DataTable( {
+		    	// "dom": '<"row"<"col-md-9 per-page"l><"col-md-3 filter"f>>t<"row"<"col-md-9"i><"col-md-3"p>>',
+		    	"dom": 't',
+		    	"oLanguage": 
+		    	{
+		    		"sSearch": "Filter: "
+		    	}
+		    } );
+		} );
+	</script>
 {% endblock %}

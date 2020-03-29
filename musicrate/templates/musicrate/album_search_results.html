@@ -1,0 +1,42 @@
+{% extends 'musicrate/base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Search Results</h2>
+        </div>
+    </div>
+
+    <table class="table table-responsive table-dark">
+        <thead>
+            <tr>
+                <th scope="col">Art</th>
+                <th scope="col">Name</th>
+                <th scope="col">Artist</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in results %}
+            <tr>
+                <td>
+                    <a href="{% url 'album_detail' pk=result.id %}?name={{ result.name }}&artist={{ result.artist }}&img={{ result.img }}">
+                        <img height="100px" width="100px" src="{{ result.img }}">
+                    </a>
+                </td>
+                <td>
+                    {{result.name}}
+                </td>
+                <td>
+                    {{result.artist}}
+                </td>
+                <td>
+                    <a class="btn btn-primary" href="{% url 'album_detail' pk=result.id %}?name={{ result.name }}&artist={{ result.artist }}&img={{ result.img }}">Details/Review</a>
+                    
+                    <a class="btn btn-success" href="{{result.link}}">Listen</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
