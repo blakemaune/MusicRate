@@ -1,0 +1,72 @@
+{% extends 'musicrate/base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Search Results</h2>
+        </div>
+    </div>
+
+    <!-- Script to toggle follow status -->
+    <script>
+        $(document).ready(function() {
+            $('.follow-button').click(function() {
+                var newText = "newtext";
+                $.get($(this).data('url'), function(response) {
+                    alert(response['message']);
+                });
+                $(this).toggleClass('btn-danger');
+                $(this).toggleClass('btn-primary');
+                var text = $(this).text();
+                if(text=="Follow"){
+                    $(this).text("Unfollow");
+                }else{
+                    $(this).text("Follow");
+                }
+            });
+        });
+    </script>
+
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                <th scope="col">Image</th>
+                <th scope="col">Name</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in results %}
+            <tr>
+                <td>
+                    <img height="100px" width="100px" src="https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg">
+                </td>
+                <td>
+                    <a href="{% url 'user_detail' result.username %}">
+                        {{result.user}}
+                    </a>
+                </td>
+                <td>
+                    <!-- Toggle following -->
+                    {% if request.user.is_authenticated %}
+                        <button 
+                        type="button" 
+                        class="btn follow-button {% if result in user.profile.follows.all %}btn-danger{% else %}btn-primary{% endif %}" 
+                        data-toggle="button" 
+                        aria-pressed="false" 
+                        data-url="{% url 'user_follow' result.username %}"
+                        >
+                            {% if result in user.profile.follows.all %}
+                                Unfollow
+                            {% else %}
+                                Follow
+                            {% endif %}
+                        </button>
+                    {% endif %}
+                    <!-- Toggle following -->
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Review, Album
+from .models import *
 from django.contrib.auth.models import User
 
 class ReviewForm(forms.ModelForm):
@@ -7,12 +7,18 @@ class ReviewForm(forms.ModelForm):
         model = Review
         fields = ('album', 'rating', 'comment',)
 
-class SearchForm(forms.ModelForm):
+class AlbumSearchForm(forms.ModelForm):
 	name = forms.CharField(required=False)
 	artist = forms.CharField(required=False)
 	class Meta:
 		model = Album
 		fields = ('name', 'artist')
+
+class ProfileSearchForm(forms.ModelForm):
+	username = forms.CharField(required=False)
+	class Meta:
+		model = Profile
+		fields = ()
 
 class UserForm(forms.ModelForm):
 	class Meta:

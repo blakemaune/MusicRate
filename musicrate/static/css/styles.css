@@ -9,6 +9,17 @@ body{
 h1, h2, h3, h4, h5, p, a{
 	color: white;
 }
+
+table a {
+	text-shadow: 1px 1px #000000;
+	border-bottom: 1px solid #000000;
+	padding-bottom: 1px
+}
+
+.carousel-caption h5, p {
+	text-shadow: 2px 2px #000000;
+}
+
 .fullwidth{
 	width=100%;
 }

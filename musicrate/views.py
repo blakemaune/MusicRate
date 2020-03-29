@@ -1,7 +1,7 @@
 import requests, json, datetime
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import *
-from .forms import ReviewForm, SearchForm, UserForm
+from .forms import *
 from .spotify_api_util import getTokenData
 from django.http import Http404, JsonResponse
 from django.contrib.auth.models import User
@@ -95,19 +95,34 @@ def album_detail(request, pk):
 		reviews = reviews.annotate(Avg('rating'))
 		return render(request, 'musicrate/album_detail.html', {'album':album, 'reviews':reviews, 'avg':avg})
 
-def search(request):
+def profile_search(request):
 	if request.method == "POST":
-		form = SearchForm(request.POST)
+		form = ProfileSearchForm(request.POST)
+		if form.is_valid():
+			postData=request.POST
+			print(postData)
+			results = Profile.objects.filter(user__username__icontains=postData['username'])
+			print("Found users matching query " + postData['username'] + ": " + results.__str__())
+			return render(request, "musicrate/profile_search_results.html", {'results': results})
+	else:
+		form = ProfileSearchForm()
+		description = "Search for a user"
+	return render(request, "musicrate/search.html", {'form': form, 'description':description})
+
+def album_search(request):
+	if request.method == "POST":
+		form = AlbumSearchForm(request.POST)
 		if form.is_valid():
 			results = request.POST
 			queryURL = buildQueryURL(request)
 			token = getToken()
 			results = getResults(queryURL, token)
 			results = trimResults(results)
-			return render(request, "musicrate/search_results.html", {'results': results})
+			return render(request, "musicrate/album_search_results.html", {'results': results})
 	else:
-		form = SearchForm()
-	return render(request, "musicrate/search.html", {'form': form})
+		form = AlbumSearchForm()
+		description = "Search for an album"
+	return render(request, "musicrate/search.html", {'form': form, 'description':description})
 
 def create_user(request):
 	if request.method == "POST":
