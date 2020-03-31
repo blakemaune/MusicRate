@@ -1,11 +1,11 @@
 {% extends 'musicrate/base.html' %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-sm-8 my-auto">
+    <div class="row justify-content-between" style="padding:10px;">
+        <div class="col-xs-6 my-auto">
             <H4>Album Detail</H4>
         </div>
-        <div class="col-sm-4 my-auto">  
+        <div class="col-xs-6 float-right">  
             {% if user.is_authenticated %}
             <a class="btn btn-primary" href="{% url 'review_new' pk=album.pk %}">Review this album</a>
             {% endif %}
@@ -14,11 +14,11 @@
     
     <div class="row">
         <!-- Album image -->
-        <div class="col-sm-6">
+        <div class="col-sm-6 text-center">
             <img height="250px" width="250px" src="{{ album.art_url }}">
         </div>
         <!-- Album title and artist -->
-        <div class="col-sm-6">
+        <div class="col-sm-6 text-center">
             <H3>{{ album.title }}</H3>
             <a href="/artist/{{ album.artist_slug }}">
                 <H4>{{ album.artist }}</H4>
@@ -36,19 +36,19 @@
     <script>
         $(document).ready(function() {
             $('#reviews').DataTable( {
-              "dom": '<"row"<"col-md-9 per-page"l><"col-md-3 filter"f>>t<"row"<"col-md-6"i><"col-md-6"p>>'
+              "dom": 'tip'
             } );
         } );
     </script>
     <div class="row">
         <div class="col-md-12">
-            <table id="reviews" class="table table-hover table-small table-dark table-bordered">
+            <table id="reviews" class="table table-responsive table-hover table-small table-dark table-bordered">
                 <thead>
                     <tr>
                         <th>User</th>
                         <th>Rating</th>
                         <th>Comments</th>
-                        <th>Updated</th>
+                        <th class="d-none d-sm-table-cell">Updated</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -73,7 +73,7 @@
                             {% endif %}
                         </td>
                         <!-- Update timestamp -->
-                        <td>
+                        <td class="d-none d-sm-table-cell">
                             {{ review.updated }}
                         </td>
                     </tr>

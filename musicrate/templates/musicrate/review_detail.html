@@ -1,41 +1,46 @@
 {% extends 'musicrate/base.html' %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-md-8">
+    <div class="row justify-content-between">
+        <div class="col-xs-8">
             <H2>Review Detail</H2>
         </div>
-        <div class="col-md-4">
+        <div class="col-xs-4">
             {% if user.is_authenticated and request.user.profile == review.reviewer %}
-                <a class="btn btn-primary" href="{% url 'review_edit' pk=review.pk %}">Edit<br/></a>
+                <a class="btn btn-primary" href="{% url 'review_edit' pk=review.pk %}">
+                    <button type="button" class="btn btn-primary">Edit</button>
+                </a>
             {% endif %}
         </div>
     </div>
 
+    
+
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 text-center">
             <img height="250px" width="250px" src="{{ review.album.art_url }}">
         </div>
         <div class="col-md-6">
-            <p>
-                <a href="/user/{{ review.author }}">
-                    Author: {{ review.author }}
-                </a>
-            </p>
-            <p>
-                <a href="/album/{{ review.album.spotify_id }}">
-                    Album: {{ review.album }}
-                </a>
-            </p>
-            <p>
-                Rating: {{ review.rating }}
-            </p>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12">
-            <p>Comments: {{ review.comment }}</p>
+            <table class="table table-dark">
+                <tbody>
+                    <tr>
+                      <td>Author:</td>
+                      <td><a href="/user/{{ review.author }}">{{ review.author }}</a></td>
+                    </tr>
+                    <tr>
+                      <td>Album:</td>
+                      <td><a href="/album/{{ review.album.spotify_id }}">{{ review.album }}</a></td>
+                    </tr>
+                    <tr>
+                      <td>Rating:</td>
+                      <td>{{ review.rating }}</td>
+                    </tr>
+                    <tr>
+                      <td>Comments:</td>
+                      <td>{{ review.comment }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 

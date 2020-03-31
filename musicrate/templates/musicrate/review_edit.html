@@ -9,11 +9,11 @@
 
     <div class="row">
         <!-- Album image -->
-        <div class="col-md-6">
-                <img height="250px" width="250px" src="{{ album.art_url }}">
+        <div class="col-md-6 text-center">
+                <img height="200" width="200" src="{{ album.art_url }}">
         </div>
         <!-- Album title and artist -->
-        <div class="col-md-6">
+        <div class="col-md-6 text-center my-auto">
             <H3>{{ album.title }}</H3>
             <H4>{{ album.artist }}</H4>
         </div>
@@ -22,13 +22,10 @@
     <form method="POST" class="post-form">
     {% csrf_token %}
         <div class="row">
-            <div class="col-md-6">
-                <H5>
-                    {{ form.album.label }}
-                </H5>
-                {{ form.album }}
+            <div class="col-md-12">
+                {{ form.album.as_hidden }}
             </div>
-            <div class="col-md-6">
+            <div class="col-md-12 text-center">
                 <H5>
                     {{ form.rating.label }}:
                 </H5>
@@ -36,7 +33,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 text-center">
                 <H5>
                     {{ form.comment.label }}:
                 </H5>
@@ -44,7 +41,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 text-center">
                 <button class="btn btn-primary" type="submit">Save</button>
             </div>
         </div>
