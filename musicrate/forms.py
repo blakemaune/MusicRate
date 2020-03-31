@@ -6,6 +6,9 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         fields = ('album', 'rating', 'comment',)
+        widgets = {
+        	'comment': forms.Textarea(attrs={'rows':4, 'cols':35}),
+        }
 
 class AlbumSearchForm(forms.ModelForm):
 	name = forms.CharField(required=False)
