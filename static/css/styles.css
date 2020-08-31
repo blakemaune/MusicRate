@@ -10,7 +10,11 @@ h1, h2, h3, h4, h5, p, a{
 	color: white;
 }
 
-table a {
+.row {
+	padding:5px;
+}
+
+table a, .row a {
 	text-shadow: 1px 1px #000000;
 	border-bottom: 1px solid #000000;
 	padding-bottom: 1px
