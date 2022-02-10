@@ -1,6 +1,6 @@
 certifi==2019.11.28
 chardet==3.0.4
-Django==2.2.10
+Django==2.2.27
 dnspython==1.16.0
 google-cloud==0.34.0
 idna==2.8
