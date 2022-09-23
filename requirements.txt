@@ -6,7 +6,7 @@ google-cloud==0.34.0
 idna==2.8
 mysql-connector-python==8.0.5
 mysqlclient==1.4.6
-protobuf==3.6.1
+protobuf==3.18.3
 PyMySQL==0.9.3
 pytz==2019.3
 requests==2.22.0
